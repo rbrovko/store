@@ -5,4 +5,5 @@ package com.example.brovkoroman.store;
  */
 
 public enum StoreType {
+    String
 }

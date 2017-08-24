@@ -85,7 +85,9 @@ public class MainActivityFragment extends Fragment {
 
         // Retrieves value from the store and displays it
         switch (type) {
-
+            case String:
+                mUIValueEdit.setText(mStore.getString(key));
+                break;
         }
     }
 
@@ -104,7 +106,9 @@ public class MainActivityFragment extends Fragment {
         // Parses user entered value and saves it in the store
         try {
             switch (type) {
-
+                case String:
+                    mStore.setString(key, value);
+                    break;
             }
         } catch (Exception eException) {
             displayMessage("Incorrect value");

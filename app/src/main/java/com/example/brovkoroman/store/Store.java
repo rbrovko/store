@@ -9,12 +9,15 @@ package com.example.brovkoroman.store;
  */
 public class Store {
     static {
-        System.loadLibrary("com_packtpub_store_Store");
+        System.loadLibrary("com_example_brovkoroman_store_Store");
     }
 
     /**
-     * Count records in Storage
-     * @return count records in storage
+     * Count records in Store
+     * @return count records in store
      */
     public native int getCount();
+
+    public native String getString(String pKey);
+    public native void setString(String pKey, String pString);
 }
