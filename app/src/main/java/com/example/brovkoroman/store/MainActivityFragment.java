@@ -11,12 +11,23 @@ import android.view.ViewGroup;
  */
 public class MainActivityFragment extends Fragment {
 
+    private Store mStore = new Store();
+
     public MainActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        updateTitle();
+        return rootView;
+    }
+
+    private void updateTitle() {
+        int numEntries = mStore.getCount();
+
+        getActivity().setTitle(String.format("Store (%1$s)", numEntries));
     }
 }
