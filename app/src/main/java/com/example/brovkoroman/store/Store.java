@@ -56,4 +56,25 @@ public class Store {
 
     public native Color[] getColorArrya(String pKey);
     public native void setColorArray(String pKey, Color[] pColorArray);
+
+    public native boolean[] getBooleanArray(String pKey);
+    public native void setBooleanArray(String pKey, boolean[] pBooleanArray);
+
+    public native byte[] getByteArray(String pKey);
+    public native void setByteArray(String pKey, byte[] pByteArray);
+
+    public native char[] getCharArray(String pKey);
+    public native void setCharArray(String pKey, char[] pCharArray);
+
+    public native double[] getDoubleArray(String pKey);
+    public native void setDoubleArray(String pKey, double[] pDoubleArray);
+
+    public native float[] getFloatArray(String pKey);
+    public native void setFloatArray(String pKey, float[] pFloatArray);
+
+    public native long[] getLongArray(String pKey);
+    public native void setLongArray(String pKey, long[] pLongArray);
+
+    public native short[] getShortArray(String pKey);
+    public native void setShortArray(String pKey, short[] pShortArray);
 }

@@ -17,5 +17,12 @@ public enum StoreType {
     Color,
     IntegerArray,
     StringArray,
-    ColorArray
+    ColorArray,
+    BooleanArray,
+    ByteArray,
+    CharArray,
+    DoubleArray,
+    FloatArray,
+    LongArray,
+    ShortArray
 }

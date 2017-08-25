@@ -16,7 +16,14 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Booleans;
+import com.google.common.primitives.Bytes;
+import com.google.common.primitives.Chars;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -148,6 +155,34 @@ public class MainActivityFragment extends Fragment {
             case ColorArray:
                 mUIValueEdit.setText(Joiner.on(";").join(mStore.getColorArrya(key)));
                 break;
+
+            case BooleanArray:
+                mUIValueEdit.setText(Booleans.join(";", mStore.getBooleanArray(key)));
+                break;
+
+            case ByteArray:
+                mUIValueEdit.setText(Joiner.on(";").join(Bytes.asList(mStore.getByteArray(key))));
+                break;
+
+            case CharArray:
+                mUIValueEdit.setText(Chars.join(";", mStore.getCharArray(key)));
+                break;
+
+            case DoubleArray:
+                mUIValueEdit.setText(Doubles.join(";", mStore.getDoubleArray(key)));
+                break;
+
+            case FloatArray:
+                mUIValueEdit.setText(Floats.join(";", mStore.getFloatArray(key)));
+                break;
+
+            case LongArray:
+                mUIValueEdit.setText(Longs.join(";", mStore.getLongArray(key)));
+                break;
+
+            case ShortArray:
+                mUIValueEdit.setText(Shorts.join(";", mStore.getShortArray(key)));
+                break;
         }
     }
 
@@ -175,7 +210,13 @@ public class MainActivityFragment extends Fragment {
                     break;
 
                 case Boolean:
-                    mStore.setBoolean(key, Boolean.parseBoolean(value));
+                    if (value.equals("true") || value.equals("1")) {
+                        mStore.setBoolean(key, true);
+                    } else if (value.equals("false") || value.equals("0")) {
+                        mStore.setBoolean(key, false);
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
                     break;
 
                 case Byte:
@@ -235,6 +276,85 @@ public class MainActivityFragment extends Fragment {
                     }, value);
                     mStore.setColorArray(key, idList.toArray(new Color[idList.size()]));
                     break;
+
+                case BooleanArray:
+                    mStore.setBooleanArray(key, Booleans.toArray(stringToList(new Function<String, Boolean>() {
+                        @Nullable
+                        @Override
+                        public Boolean apply(@Nullable String input) {
+                            if (input.equals("true") || input.equals("1")) {
+                                return Boolean.TRUE;
+                            } else if (input.equals("false") || input.equals("0")) {
+                                return Boolean.FALSE;
+                            } else {
+                                throw new IllegalArgumentException();
+                            }
+                        }
+                    }, value)));
+                    break;
+
+                case ByteArray:
+                    mStore.setByteArray(key, Bytes.toArray(stringToList(new Function<String, Byte>() {
+                        @Nullable
+                        @Override
+                        public Byte apply(@Nullable String input) {
+                            return Byte.parseByte(input);
+                        }
+                    }, value)));
+                    break;
+
+                case CharArray:
+                    mStore.setCharArray(key, Chars.toArray(stringToList(new Function<String, Character>() {
+                        @Nullable
+                        @Override
+                        public Character apply(@Nullable String input) {
+                            if (input.length() == 1) {
+                                return input.charAt(0);
+                            } else {
+                                throw new IllegalArgumentException();
+                            }
+                        }
+                    }, value)));
+                    break;
+
+                case DoubleArray:
+                    mStore.setDoubleArray(key, Doubles.toArray(stringToList(new Function<String, Double>() {
+                        @Nullable
+                        @Override
+                        public Double apply(@Nullable String input) {
+                            return Double.parseDouble(input);
+                        }
+                    }, value)));
+                    break;
+
+                case FloatArray:
+                    mStore.setFloatArray(key, Floats.toArray(stringToList(new Function<String, Float>() {
+                        @Nullable
+                        @Override
+                        public Float apply(@Nullable String input) {
+                            return Float.parseFloat(input);
+                        }
+                    }, value)));
+                    break;
+
+                case LongArray:
+                    mStore.setLongArray(key, Longs.toArray(stringToList(new Function<String, Long>() {
+                        @Nullable
+                        @Override
+                        public Long apply(@Nullable String input) {
+                            return Long.parseLong(input);
+                        }
+                    }, value)));
+                    break;
+
+                case ShortArray:
+                    mStore.setShortArray(key, Shorts.toArray(stringToList(new Function<String, Short>() {
+                        @Nullable
+                        @Override
+                        public Short apply(@Nullable String input) {
+                            return Short.parseShort(input);
+                        }
+                    }, value)));
             }
         } catch (Exception eException) {
             displayMessage("Incorrect value");
