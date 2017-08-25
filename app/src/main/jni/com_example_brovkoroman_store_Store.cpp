@@ -3,6 +3,7 @@
 //
 
 #include <cstdlib>
+#include <cstdint>
 
 #include "com_example_brovkoroman_store_Store.h"
 #include "Store.h"
@@ -13,7 +14,31 @@
  */
 static Store gStore;
 
+static jclass StringClass;
+static jclass ColorClass;
+
 JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
+
+    JNIEnv *env;
+    if (pVM->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
+        abort();
+    }
+
+    // If returned class is null, an exception is raised by the VM
+    jclass StringClassTmp = env->FindClass("java/lang/String");
+    if (StringClassTmp == NULL) {
+        abort();
+    }
+    StringClass = (jclass) env->NewGlobalRef(StringClassTmp);
+    env->DeleteLocalRef(StringClassTmp);
+
+    jclass ColorClassTmp = env->FindClass("com/example/brovkoroman/store/Color");
+    if (ColorClassTmp == NULL) {
+        abort();
+    }
+    ColorClass = (jclass) env->NewGlobalRef(ColorClassTmp);
+    env->DeleteLocalRef(ColorClassTmp);
+
     // Store initialization
     gStore.mLength = 0;
     return JNI_VERSION_1_6;
@@ -150,7 +175,7 @@ JNIEXPORT jdouble JNICALL Java_com_example_brovkoroman_store_Store_getDouble
     if (isEntryValid(pEnv, entry, StoreType_Double)) {
         return entry->mValue.mDouble;
     } else {
-        return 0;
+        return 0.0;
     }
 }
 
@@ -171,7 +196,7 @@ JNIEXPORT jfloat JNICALL Java_com_example_brovkoroman_store_Store_getFloat
     if (isEntryValid(pEnv, entry, StoreType_Float)) {
         return entry->mValue.mFloat;
     } else {
-        return 0;
+        return 0.0f;
     }
 }
 
@@ -229,7 +254,7 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShort
 
 JNIEXPORT jobject JNICALL Java_com_example_brovkoroman_store_Store_getColor
         (JNIEnv *pEnv, jobject pThis, jstring pKey) {
-    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
 
     if (isEntryValid(pEnv, entry, StoreType_Color)) {
         return entry->mValue.mColor;
@@ -252,5 +277,155 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColor
          * garbage collection after method returns
          */
         entry->mValue.mColor = pEnv->NewGlobalRef(pColor);
+    }
+}
+
+JNIEXPORT jintArray JNICALL Java_com_example_brovkoroman_store_Store_getIntegerArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_IntegerArray)) {
+        jintArray javaArray = pEnv->NewIntArray(entry->mLength);
+        pEnv->SetIntArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mIntegerArray);
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setIntegerArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jintArray pIntegerArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, StoreType_IntegerArray);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pIntegerArray);
+        int32_t *array = new int32_t[length];
+        pEnv->GetIntArrayRegion(pIntegerArray, 0, length, array);
+
+        entry->mType = StoreType_IntegerArray;
+        entry->mLength = length;
+        entry->mValue.mIntegerArray = array;
+    }
+}
+
+JNIEXPORT jobjectArray JNICALL Java_com_example_brovkoroman_store_Store_getStringArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_StringArray)) {
+        // An array of String in Java is in fact an array of object
+        jobjectArray javaArray = pEnv->NewObjectArray(entry->mLength, StringClass, NULL);
+
+        /*
+         * Creates a new Java String object for each C string stored
+         * Reference to the String can be removed right after it is
+         * added to the Java array, as the latter holds a reference
+         * to the String object
+         */
+        for (int32_t i = 0; i < entry->mLength; ++i) {
+            jstring string = pEnv->NewStringUTF(entry->mValue.mStringArray[i]);
+
+            // Puts the new string in the array
+            pEnv->SetObjectArrayElement(javaArray, i, string);
+
+            // Do it here to avoid holding many useless local refs
+            pEnv->DeleteLocalRef(string);
+        }
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setStringArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jobjectArray pStringArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, StoreType_StringArray);
+
+    if (entry != NULL) {
+        // Allocates an array of C string
+        jsize length = pEnv->GetArrayLength(pStringArray);
+        char **array = new char*[length];
+
+        // Fills the C array with a copy of each input Java string
+        for (int32_t i = 0; i < length; ++i) {
+            // Gets the current Java String from the input Java array
+            // Object arrays can be accessed element by element only
+            jstring string = (jstring) pEnv->GetObjectArrayElement(pStringArray, i);
+
+            jsize stringLength = pEnv->GetStringLength(string);
+            array[i] = new char[stringLength + 1];
+
+            // Directly copies the Java String into our new C buffer
+            pEnv->GetStringUTFRegion(string, 0, stringLength, array[i]);
+
+            // Append the null character for string termination
+            array[i][stringLength] = '\0';
+
+            // No need to keep a reference to the Java string anymore
+            pEnv->DeleteLocalRef(string);
+        }
+
+        entry->mType = StoreType_StringArray;
+        entry->mLength = length;
+        entry->mValue.mStringArray = array;
+    }
+}
+
+JNIEXPORT jobjectArray JNICALL Java_com_example_brovkoroman_store_Store_getColorArrya
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_ColorArray)) {
+        // Creates a new array with objects of type Id
+        jobjectArray javaArray = pEnv->NewObjectArray(entry->mLength, ColorClass, NULL);
+
+        /*
+         * Fills the array with the Color objects stored on the native
+         * side, which keeps a global reference to them. So no need
+         * to delete or create any reference here
+         */
+        for (int32_t i = 0; i < entry->mLength; ++i) {
+            pEnv->SetObjectArrayElement(javaArray, i, entry->mValue.mColorArray[i]);
+        }
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColorArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jobjectArray pColorArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, StoreType_ColorArray);
+
+    if (entry != NULL) {
+        // Allocates an array of Color objects
+        jsize length = pEnv->GetArrayLength(pColorArray);
+        jobject *array = new jobject[length];
+
+        // Fills the C array with a copy of each input Java Color
+        for (int32_t i = 0; i < length; ++i) {
+            // Gets the current Color from the input Java array
+            // Object arrays can be accessed element by element only
+            jobject localColor = (jobject) pEnv->GetObjectArrayElement(pColorArray, i);
+
+            /*
+             * The Java Color is going to be stored on the native side
+             * Need to keep a global reference to avoid a potential
+             * garbage collection after method returns
+             */
+            array[i] = pEnv->NewGlobalRef(localColor);
+
+            /*
+             * We have a global reference to the Color, so we can now
+             * get rid of the local one
+             */
+            pEnv->DeleteLocalRef(localColor);
+        }
+
+        entry->mType = StoreType_ColorArray;
+        entry->mLength = length;
+        entry->mValue.mColorArray = array;
     }
 }

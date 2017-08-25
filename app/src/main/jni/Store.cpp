@@ -65,5 +65,28 @@ void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry) {
             // Unreferences the object for garbage collection
             pEnv->DeleteGlobalRef(pEntry->mValue.mColor);
             break;
+
+        case StoreType_IntegerArray:
+            delete[] pEntry->mValue.mIntegerArray;
+            break;
+
+        case StoreType_StringArray:
+            /**
+             * Destroys every C string pointed by the String array
+             * before releasing it
+             */
+            for (int32_t i = 0; i < pEntry->mLength; ++i) {
+                delete pEntry->mValue.mStringArray[i];
+            }
+            delete[] pEntry->mValue.mStringArray;
+            break;
+
+        case StoreType_ColorArray:
+            // Unreferences every Id before releasing the Id array
+            for (int32_t i = 0; i < pEntry->mLength; ++i) {
+                pEnv->DeleteGlobalRef(pEntry->mValue.mColorArray[i]);
+            }
+            delete[] pEntry->mValue.mColorArray;
+            break;
     }
 }

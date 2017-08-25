@@ -1,5 +1,6 @@
 package com.example.brovkoroman.store;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +12,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -124,6 +136,18 @@ public class MainActivityFragment extends Fragment {
             case Color:
                 mUIValueEdit.setText(mStore.getColor(key).toString());
                 break;
+
+            case IntegerArray:
+                mUIValueEdit.setText(Ints.join(";", mStore.getIntegerArray(key)));
+                break;
+
+            case StringArray:
+                mUIValueEdit.setText(Joiner.on(";").join(mStore.getStringArray(key)));
+                break;
+
+            case ColorArray:
+                mUIValueEdit.setText(Joiner.on(";").join(mStore.getColorArrya(key)));
+                break;
         }
     }
 
@@ -185,6 +209,32 @@ public class MainActivityFragment extends Fragment {
                 case Color:
                     mStore.setColor(key, new Color(value));
                     break;
+
+                case IntegerArray:
+                    mStore.setIntegerArray(key, Ints.toArray(stringToList(new Function<String, Integer>() {
+                        @Nullable
+                        @Override
+                        public Integer apply(@Nullable String input) {
+                            return Integer.parseInt(input);
+                        }
+                    }, value)));
+                    break;
+
+                case StringArray:
+                    String[] stringArray = value.split(";");
+                    mStore.setStringArray(key, stringArray);
+                    break;
+
+                case ColorArray:
+                    List<Color> idList = stringToList(new Function<String, Color>() {
+                        @Nullable
+                        @Override
+                        public Color apply(@Nullable String input) {
+                            return new Color(input);
+                        }
+                    }, value);
+                    mStore.setColorArray(key, idList.toArray(new Color[idList.size()]));
+                    break;
             }
         } catch (Exception eException) {
             displayMessage("Incorrect value");
@@ -192,7 +242,26 @@ public class MainActivityFragment extends Fragment {
         updateTitle();
     }
 
+    /**
+     * Helper method to display a message
+     * @param pMesage Message
+     */
     private void displayMessage(String pMesage) {
         Toast.makeText(getActivity(), pMesage, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Helper method to convert a string to a list of values
+     * @param pConversion Function
+     * @param pValue String values
+     * @param <TType> Type
+     * @return List of values
+     */
+    @NonNull
+    private <TType>List<TType> stringToList(Function<String, TType> pConversion, String pValue) {
+        String[] splitArray = pValue.split(";");
+        List<String> splitList = Arrays.asList(splitArray);
+
+        return Lists.transform(splitList, pConversion);
     }
 }

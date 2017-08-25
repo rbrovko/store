@@ -47,4 +47,13 @@ public class Store {
 
     public native Color getColor(String pKey);
     public native void setColor(String pKey, Color pColor);
+
+    public native int[] getIntegerArray(String pKey);
+    public native void setIntegerArray(String pKey, int[] pIntArray);
+
+    public native String[] getStringArray(String pKey);
+    public native void setStringArray(String pKey, String[] pStringArray);
+
+    public native Color[] getColorArrya(String pKey);
+    public native void setColorArray(String pKey, Color[] pColorArray);
 }
