@@ -60,5 +60,10 @@ void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry) {
         case StoreType_String:
             delete pEntry->mValue.mString;
             break;
+
+        case StoreType_Color:
+            // Unreferences the object for garbage collection
+            pEnv->DeleteGlobalRef(pEntry->mValue.mColor);
+            break;
     }
 }

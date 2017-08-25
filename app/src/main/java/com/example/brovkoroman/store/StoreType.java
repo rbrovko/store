@@ -13,5 +13,6 @@ public enum StoreType {
     Double,
     Float,
     Long,
-    Short
+    Short,
+    Color
 }

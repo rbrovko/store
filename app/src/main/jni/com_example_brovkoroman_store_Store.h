@@ -159,6 +159,22 @@ JNIEXPORT jshort JNICALL Java_com_example_brovkoroman_store_Store_getShort
 JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShort
   (JNIEnv *, jobject, jstring, jshort);
 
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getColor
+ * Signature: (Ljava/lang/String;)Lcom/example/brovkoroman/store/Color;
+ */
+JNIEXPORT jobject JNICALL Java_com_example_brovkoroman_store_Store_getColor
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setColor
+ * Signature: (Ljava/lang/String;Lcom/example/brovkoroman/store/Color;)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColor
+  (JNIEnv *, jobject, jstring, jobject);
+
 #ifdef __cplusplus
 }
 #endif

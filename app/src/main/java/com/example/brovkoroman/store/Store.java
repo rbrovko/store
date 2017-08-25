@@ -44,4 +44,7 @@ public class Store {
 
     public native short getShort(String pKey);
     public native void setShort(String pKey, short pShort);
+
+    public native Color getColor(String pKey);
+    public native void setColor(String pKey, Color pColor);
 }

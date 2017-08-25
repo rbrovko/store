@@ -120,6 +120,10 @@ public class MainActivityFragment extends Fragment {
             case Short:
                 mUIValueEdit.setText(Short.toString(mStore.getShort(key)));
                 break;
+
+            case Color:
+                mUIValueEdit.setText(mStore.getColor(key).toString());
+                break;
         }
     }
 
@@ -176,6 +180,10 @@ public class MainActivityFragment extends Fragment {
 
                 case Short:
                     mStore.setShort(key, Short.parseShort(value));
+                    break;
+
+                case Color:
+                    mStore.setColor(key, new Color(value));
                     break;
             }
         } catch (Exception eException) {

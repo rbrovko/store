@@ -25,7 +25,8 @@ typedef enum {
     StoreType_Double,
     StoreType_Float,
     StoreType_Long,
-    StoreType_Short
+    StoreType_Short,
+    StoreType_Color
 } StoreType;
 
 /*
@@ -41,6 +42,7 @@ typedef union {
     float mFloat;
     int64_t mLong;
     int16_t mShort;
+    jobject mColor;
 } StoreValue;
 
 typedef struct {

@@ -226,3 +226,31 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShort
         entry->mValue.mShort = pShort;
     }
 }
+
+JNIEXPORT jobject JNICALL Java_com_example_brovkoroman_store_Store_getColor
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Color)) {
+        return entry->mValue.mColor;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColor
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jobject pColor) {
+    // Save the Color reference in the store
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Color;
+
+        /*
+         * The Java Color is going to be stored on the native side
+         * Need to keep a global reference to avoid a potential
+         * garbage collection after method returns
+         */
+        entry->mValue.mColor = pEnv->NewGlobalRef(pColor);
+    }
+}
