@@ -18,7 +18,14 @@
  */
 typedef enum {
     StoreType_String,
-    StoreType_Integer
+    StoreType_Integer,
+    StoreType_Boolean,
+    StoreType_Byte,
+    StoreType_Char,
+    StoreType_Double,
+    StoreType_Float,
+    StoreType_Long,
+    StoreType_Short
 } StoreType;
 
 /*
@@ -27,6 +34,13 @@ typedef enum {
 typedef union {
     char *mString;
     int32_t mInteger;
+    uint8_t mBoolean;
+    int8_t mByte;
+    uint16_t mChar;
+    double mDouble;
+    float mFloat;
+    int64_t mLong;
+    int16_t mShort;
 } StoreValue;
 
 typedef struct {

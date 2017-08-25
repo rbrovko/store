@@ -79,3 +79,150 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setInteger
         entry->mValue.mInteger = pInteger;
     }
 }
+
+JNIEXPORT jboolean JNICALL Java_com_example_brovkoroman_store_Store_getBoolean
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Boolean)) {
+        return entry->mValue.mBoolean;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setBoolean
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jboolean pBoolean) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Boolean;
+        entry->mValue.mBoolean = pBoolean;
+    }
+}
+
+JNIEXPORT jbyte JNICALL Java_com_example_brovkoroman_store_Store_getByte
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Byte)) {
+        return entry->mValue.mByte;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setByte
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jbyte pByte) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Byte;
+        entry->mValue.mByte = pByte;
+    }
+}
+
+JNIEXPORT jchar JNICALL Java_com_example_brovkoroman_store_Store_getChar
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Char)) {
+        return entry->mValue.mChar;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setChar
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jchar pChar) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Char;
+        entry->mValue.mChar = pChar;
+    }
+}
+
+JNIEXPORT jdouble JNICALL Java_com_example_brovkoroman_store_Store_getDouble
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Double)) {
+        return entry->mValue.mDouble;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setDouble
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jdouble pDouble) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Double;
+        entry->mValue.mDouble = pDouble;
+    }
+}
+
+JNIEXPORT jfloat JNICALL Java_com_example_brovkoroman_store_Store_getFloat
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Float)) {
+        return entry->mValue.mFloat;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setFloat
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jfloat pFloat) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Float;
+        entry->mValue.mFloat = pFloat;
+    }
+}
+
+JNIEXPORT jlong JNICALL Java_com_example_brovkoroman_store_Store_getLong
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Long)) {
+        return entry->mValue.mLong;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setLong
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jlong pLong) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Long;
+        entry->mValue.mLong = pLong;
+    }
+}
+
+JNIEXPORT jshort JNICALL Java_com_example_brovkoroman_store_Store_getShort
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_Short)) {
+        return entry->mValue.mShort;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShort
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jshort pShort) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Short;
+        entry->mValue.mShort = pShort;
+    }
+}

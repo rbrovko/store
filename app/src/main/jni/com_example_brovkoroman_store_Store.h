@@ -47,6 +47,118 @@ JNIEXPORT jint JNICALL Java_com_example_brovkoroman_store_Store_getInteger
 JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setInteger
   (JNIEnv *, jobject, jstring, jint);
 
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getBoolean
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_example_brovkoroman_store_Store_getBoolean
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setBoolean
+ * Signature: (Ljava/lang/String;Z)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setBoolean
+  (JNIEnv *, jobject, jstring, jboolean);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getByte
+ * Signature: (Ljava/lang/String;)B
+ */
+JNIEXPORT jbyte JNICALL Java_com_example_brovkoroman_store_Store_getByte
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setByte
+ * Signature: (Ljava/lang/String;B)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setByte
+  (JNIEnv *, jobject, jstring, jbyte);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getChar
+ * Signature: (Ljava/lang/String;)C
+ */
+JNIEXPORT jchar JNICALL Java_com_example_brovkoroman_store_Store_getChar
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setChar
+ * Signature: (Ljava/lang/String;C)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setChar
+  (JNIEnv *, jobject, jstring, jchar);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getDouble
+ * Signature: (Ljava/lang/String;)D
+ */
+JNIEXPORT jdouble JNICALL Java_com_example_brovkoroman_store_Store_getDouble
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setDouble
+ * Signature: (Ljava/lang/String;D)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setDouble
+  (JNIEnv *, jobject, jstring, jdouble);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getFloat
+ * Signature: (Ljava/lang/String;)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_example_brovkoroman_store_Store_getFloat
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setFloat
+ * Signature: (Ljava/lang/String;F)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setFloat
+  (JNIEnv *, jobject, jstring, jfloat);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getLong
+ * Signature: (Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_com_example_brovkoroman_store_Store_getLong
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setLong
+ * Signature: (Ljava/lang/String;J)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setLong
+  (JNIEnv *, jobject, jstring, jlong);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getShort
+ * Signature: (Ljava/lang/String;)S
+ */
+JNIEXPORT jshort JNICALL Java_com_example_brovkoroman_store_Store_getShort
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setShort
+ * Signature: (Ljava/lang/String;S)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShort
+  (JNIEnv *, jobject, jstring, jshort);
+
 #ifdef __cplusplus
 }
 #endif

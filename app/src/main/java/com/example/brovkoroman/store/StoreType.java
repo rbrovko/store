@@ -6,5 +6,12 @@ package com.example.brovkoroman.store;
 
 public enum StoreType {
     String,
-    Integer
+    Integer,
+    Boolean,
+    Byte,
+    Char,
+    Double,
+    Float,
+    Long,
+    Short
 }

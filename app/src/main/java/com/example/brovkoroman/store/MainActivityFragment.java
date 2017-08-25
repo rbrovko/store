@@ -92,6 +92,34 @@ public class MainActivityFragment extends Fragment {
             case Integer:
                 mUIValueEdit.setText(Integer.toString(mStore.getInteger(key)));
                 break;
+
+            case Boolean:
+                mUIValueEdit.setText(Boolean.toString(mStore.getBoolean(key)));
+                break;
+
+            case Byte:
+                mUIValueEdit.setText(Byte.toString(mStore.getByte(key)));
+                break;
+
+            case Char:
+                mUIValueEdit.setText(Character.toString(mStore.getChar(key)));
+                break;
+
+            case Double:
+                mUIValueEdit.setText(Double.toString(mStore.getDouble(key)));
+                break;
+
+            case Float:
+                mUIValueEdit.setText(Float.toString(mStore.getFloat(key)));
+                break;
+
+            case Long:
+                mUIValueEdit.setText(Long.toString(mStore.getLong(key)));
+                break;
+
+            case Short:
+                mUIValueEdit.setText(Short.toString(mStore.getShort(key)));
+                break;
         }
     }
 
@@ -116,6 +144,38 @@ public class MainActivityFragment extends Fragment {
 
                 case Integer:
                     mStore.setInteger(key, Integer.parseInt(value));
+                    break;
+
+                case Boolean:
+                    mStore.setBoolean(key, Boolean.parseBoolean(value));
+                    break;
+
+                case Byte:
+                    mStore.setByte(key, Byte.parseByte(value));
+                    break;
+
+                case Char:
+                    if (value.length() == 1) {
+                        mStore.setChar(key, value.charAt(0));
+                    } else {
+                        throw  new IllegalArgumentException();
+                    }
+                    break;
+
+                case Double:
+                    mStore.setDouble(key, Double.parseDouble(value));
+                    break;
+
+                case Float:
+                    mStore.setFloat(key, Float.parseFloat(value));
+                    break;
+
+                case Long:
+                    mStore.setLong(key, Long.parseLong(value));
+                    break;
+
+                case Short:
+                    mStore.setShort(key, Short.parseShort(value));
                     break;
             }
         } catch (Exception eException) {
