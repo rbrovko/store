@@ -58,3 +58,24 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setString
         entry->mValue.mString[stringLenght] = '\0';
     }
 }
+
+JNIEXPORT jint JNICALL Java_com_example_brovkoroman_store_Store_getInteger
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (!isEntryValid(pEnv, entry, StoreType_Integer)) {
+        return entry->mValue.mInteger;
+    } else {
+        return 0;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setInteger
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jint pInteger) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        entry->mType = StoreType_Integer;
+        entry->mValue.mInteger = pInteger;
+    }
+}

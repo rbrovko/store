@@ -40,7 +40,7 @@ public class MainActivityFragment extends Fragment {
         mUIValueEdit = (EditText) rootView.findViewById(R.id.uiValueEdit);
 
         // Initializes type selector
-        ArrayAdapter<StoreType> adapter = new ArrayAdapter<StoreType>(getActivity(),
+        ArrayAdapter<StoreType> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, StoreType.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mUITypeSpinner = (Spinner) rootView.findViewById(R.id.uiTypeSpinner);
@@ -88,6 +88,10 @@ public class MainActivityFragment extends Fragment {
             case String:
                 mUIValueEdit.setText(mStore.getString(key));
                 break;
+
+            case Integer:
+                mUIValueEdit.setText(Integer.toString(mStore.getInteger(key)));
+                break;
         }
     }
 
@@ -108,6 +112,10 @@ public class MainActivityFragment extends Fragment {
             switch (type) {
                 case String:
                     mStore.setString(key, value);
+                    break;
+
+                case Integer:
+                    mStore.setInteger(key, Integer.parseInt(value));
                     break;
             }
         } catch (Exception eException) {

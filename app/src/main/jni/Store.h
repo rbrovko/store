@@ -17,7 +17,8 @@
  * Types handled by the store
  */
 typedef enum {
-    StoreType_String
+    StoreType_String,
+    StoreType_Integer
 } StoreType;
 
 /*
@@ -25,6 +26,7 @@ typedef enum {
  */
 typedef union {
     char *mString;
+    int32_t mInteger;
 } StoreValue;
 
 typedef struct {
