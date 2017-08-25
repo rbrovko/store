@@ -175,6 +175,54 @@ JNIEXPORT jobject JNICALL Java_com_example_brovkoroman_store_Store_getColor
 JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColor
   (JNIEnv *, jobject, jstring, jobject);
 
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getIntegerArray
+ * Signature: (Ljava/lang/String;)[I
+ */
+JNIEXPORT jintArray JNICALL Java_com_example_brovkoroman_store_Store_getIntegerArray
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setIntegerArray
+ * Signature: (Ljava/lang/String;[I)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setIntegerArray
+  (JNIEnv *, jobject, jstring, jintArray);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getStringArray
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_example_brovkoroman_store_Store_getStringArray
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setStringArray
+ * Signature: (Ljava/lang/String;[Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setStringArray
+  (JNIEnv *, jobject, jstring, jobjectArray);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    getColorArrya
+ * Signature: (Ljava/lang/String;)[Lcom/example/brovkoroman/store/Color;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_example_brovkoroman_store_Store_getColorArrya
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    setColorArray
+ * Signature: (Ljava/lang/String;[Lcom/example/brovkoroman/store/Color;)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColorArray
+  (JNIEnv *, jobject, jstring, jobjectArray);
+
 #ifdef __cplusplus
 }
 #endif

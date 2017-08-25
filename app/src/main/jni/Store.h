@@ -26,14 +26,17 @@ typedef enum {
     StoreType_Float,
     StoreType_Long,
     StoreType_Short,
-    StoreType_Color
+    StoreType_Color,
+    StoreType_IntegerArray,
+    StoreType_StringArray,
+    StoreType_ColorArray
 } StoreType;
 
 /*
  * Store data structures
  */
 typedef union {
-    char *mString;
+    char* mString;
     int32_t mInteger;
     uint8_t mBoolean;
     int8_t mByte;
@@ -43,12 +46,16 @@ typedef union {
     int64_t mLong;
     int16_t mShort;
     jobject mColor;
+    int32_t* mIntegerArray;
+    char** mStringArray;
+    jobject* mColorArray;
 } StoreValue;
 
 typedef struct {
     char *mKey;
     StoreType mType;
     StoreValue mValue;
+    int32_t mLength;
 } StoreEntry;
 
 typedef struct {

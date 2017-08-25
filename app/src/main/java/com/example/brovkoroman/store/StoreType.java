@@ -14,5 +14,8 @@ public enum StoreType {
     Float,
     Long,
     Short,
-    Color
+    Color,
+    IntegerArray,
+    StringArray,
+    ColorArray
 }
