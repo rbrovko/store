@@ -63,7 +63,7 @@ JNIEXPORT jint JNICALL Java_com_example_brovkoroman_store_Store_getInteger
         (JNIEnv *pEnv, jobject pThis, jstring pKey) {
     StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
 
-    if (!isEntryValid(pEnv, entry, StoreType_Integer)) {
+    if (isEntryValid(pEnv, entry, StoreType_Integer)) {
         return entry->mValue.mInteger;
     } else {
         return 0;
