@@ -91,7 +91,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
     if (StoreThreadSafeClass == NULL) {
         abort();
     }
-    jfieldID lockField = env->GetStaticFieldID(StoreThreadSafeClass, "LOCK", "Ljava/lang/Object");
+    jfieldID lockField = env->GetStaticFieldID(StoreThreadSafeClass, "LOCK", "Ljava/lang/Object;");
     if (lockField == NULL) {
         abort();
     }

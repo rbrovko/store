@@ -12,8 +12,12 @@ public class StoreThreadSafe extends Store {
 
     public StoreThreadSafe(StoreListener pListener) {
         super(pListener);
+
+        // TODO: fix crash
+        StoreThreadSafe.LOCK = new Object();
     }
 
+    // TODO: crash if use synchronized (LOCK)
     @Override
     public int getCount() {
         synchronized (LOCK) {
@@ -307,4 +311,5 @@ public class StoreThreadSafe extends Store {
             super.stopWatcher(pPointer);
         }
     }
+
 }
