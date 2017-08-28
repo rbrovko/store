@@ -18,6 +18,10 @@ static Store gStore;
 static jclass StringClass;
 static jclass ColorClass;
 
+static jmethodID MethodOnSuccessInt;
+static jmethodID MethodOnSuccessString;
+static jmethodID MethodOnSuccessColor;
+
 JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
 
     JNIEnv *env;
@@ -39,6 +43,29 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
     }
     ColorClass = (jclass) env->NewGlobalRef(ColorClassTmp);
     env->DeleteLocalRef(ColorClassTmp);
+
+    // Caches methods
+    jclass StoreClass = env->FindClass("com/example/brovkoroman/store/Store");
+    if (StoreClass == NULL) {
+        abort();
+    }
+
+    MethodOnSuccessInt = env->GetMethodID(StoreClass, "onSuccess", "(I)V");
+    if (MethodOnSuccessInt == NULL) {
+        abort();
+    }
+
+    MethodOnSuccessString = env->GetMethodID(StoreClass, "onSuccess", "(Ljava/lang/String;)V");
+    if (MethodOnSuccessString == NULL) {
+        abort();
+    }
+
+    MethodOnSuccessColor = env->GetMethodID(StoreClass, "onSuccess", "(Lcom/example/brovkoroman/store/Color;)V");
+    if (MethodOnSuccessColor == NULL) {
+        abort();
+    }
+
+    env->DeleteLocalRef(StoreClass);
 
     // Store initialization
     gStore.mLength = 0;
@@ -82,6 +109,8 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setString
 
         // Append the null character for string termination
         entry->mValue.mString[stringLenght] = '\0';
+
+        pEnv->CallVoidMethod(pThis, MethodOnSuccessString, (jstring) pEnv->NewStringUTF(entry->mValue.mString));
     }
 }
 
@@ -103,6 +132,8 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setInteger
     if (entry != NULL) {
         entry->mType = StoreType_Integer;
         entry->mValue.mInteger = pInteger;
+
+        pEnv->CallVoidMethod(pThis, MethodOnSuccessInt, (jint) entry->mValue.mInteger);
     }
 }
 
@@ -278,6 +309,8 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColor
          * garbage collection after method returns
          */
         entry->mValue.mColor = pEnv->NewGlobalRef(pColor);
+
+        pEnv->CallVoidMethod(pThis, MethodOnSuccessColor, (jobject) entry->mValue.mColor);
     }
 }
 
