@@ -40,7 +40,9 @@ import javax.annotation.Nullable;
  */
 public class MainActivityFragment extends Fragment implements StoreListener {
 
-    private Store mStore = new Store(this);
+    private StoreThreadSafe mStore = new StoreThreadSafe(this);
+    private long mWatcher;
+
     private EditText mUIKeyEdit, mUIValueEdit;
     private Spinner mUITypeSpinner;
     private Button mUIGetButton, mUISetButton;
@@ -62,6 +64,18 @@ public class MainActivityFragment extends Fragment implements StoreListener {
     @Override
     public void onSuccess(Color pValue) {
         displayMessage(String.format("Color '%1$s' successfuly saved!", pValue));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mWatcher = mStore.startWatcher();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mStore.stopWatcher(mWatcher);
     }
 
     @Override

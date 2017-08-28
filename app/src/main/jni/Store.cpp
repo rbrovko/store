@@ -5,6 +5,7 @@
 #include "Store.h"
 #include <cstdlib>
 #include <cstring>
+#include <unistd.h>
 
 bool isEntryValid(JNIEnv *pEnv, StoreEntry *pEntry, StoreType pType) {
     if (pEntry == NULL) {
@@ -170,4 +171,91 @@ void throwStoreFullException(JNIEnv *pEnv) {
     }
 
     pEnv->DeleteLocalRef(class1);
+}
+
+StoreWatcher* startWatcher(JavaVM *pJavaVM, Store *pStore, jobject pLock) {
+    StoreWatcher *watcher = new StoreWatcher();
+    watcher->mJavaVM = pJavaVM;
+    watcher->mStore = pStore;
+    watcher->mLock = pLock;
+    watcher->mRunning = true;
+
+    // Initializes and launches the native thread
+    pthread_attr_t lAttributes;
+    if (pthread_attr_init(&lAttributes)) {
+        abort();
+    }
+    if (pthread_create(&watcher->mThread, &lAttributes, runWatcher, watcher)) {
+        abort();
+    }
+
+    return watcher;
+}
+
+void stopWatcher(StoreWatcher *pWatcher) {
+    pWatcher->mRunning = false;
+}
+
+void* runWatcher(void* pArgs) {
+    StoreWatcher *watcher = (StoreWatcher *)pArgs;
+    Store *store = watcher->mStore;
+
+    JavaVM *javaVM = watcher->mJavaVM;
+    JavaVMAttachArgs javaVMAttachArgs;
+    javaVMAttachArgs.version = JNI_VERSION_1_6;
+    javaVMAttachArgs.name = "NativeThread";
+    javaVMAttachArgs.group = NULL;
+
+    /*
+     * Attaches current thread to the Dalvik VM so that it is known
+     * from Java and can call Java code
+     */
+    JNIEnv *env;
+    if (javaVM->AttachCurrentThreadAsDaemon(&env, &javaVMAttachArgs) != JNI_OK) {
+        abort();
+    }
+
+    // Runs the thread loop
+    while (true) {
+        sleep(5); // In seconds
+
+        /*
+         * Critical section beginning, one thread at a time
+         * Entries cannot be added or modified
+         */
+        env->MonitorEnter(watcher->mLock);
+        if (!watcher->mRunning) {
+            break;
+        }
+
+        StoreEntry *entry = watcher->mStore->mEntries;
+        StoreEntry *entryEnd = entry + watcher->mStore->mLength;
+        while (entry < entryEnd) {
+            processEntry(entry);
+            ++entry;
+        }
+
+        // Critical section end
+        env->MonitorExit(watcher->mLock);
+    }
+
+    /*
+     * Stops the thread. It is very important to always detach an
+     * attached thread. Allowed if thread is already detached
+     */
+    javaVM->DetachCurrentThread();
+    delete watcher;
+    pthread_exit(NULL);
+}
+
+void processEntry(StoreEntry *pEntry) {
+    switch (pEntry->mType) {
+        case StoreType_Integer:
+            if (pEntry->mValue.mInteger > 100000) {
+                pEntry->mValue.mInteger = 100000;
+            } else if (pEntry->mValue.mInteger < -100000) {
+                pEntry->mValue.mInteger = -100000;
+            }
+            break;
+    }
 }

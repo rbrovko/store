@@ -335,6 +335,22 @@ JNIEXPORT jshortArray JNICALL Java_com_example_brovkoroman_store_Store_getShortA
 JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShortArray
   (JNIEnv *, jobject, jstring, jshortArray);
 
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    startWatcher
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_example_brovkoroman_store_Store_startWatcher
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_example_brovkoroman_store_Store
+ * Method:    stopWatcher
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_stopWatcher
+  (JNIEnv *, jobject, jlong);
+
 #ifdef __cplusplus
 }
 #endif

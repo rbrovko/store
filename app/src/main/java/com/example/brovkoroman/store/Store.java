@@ -88,6 +88,9 @@ public class Store implements StoreListener {
     public native short[] getShortArray(String pKey) throws NotExistingKeyException, InvalidTypeException;
     public native void setShortArray(String pKey, short[] pShortArray);
 
+    public native long startWatcher();
+    public native void stopWatcher(long pPointer);
+
     @Override
     public void onSuccess(int pValue) {
         mListener.onSuccess(pValue);

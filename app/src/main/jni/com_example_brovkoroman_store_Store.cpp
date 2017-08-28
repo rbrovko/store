@@ -14,6 +14,7 @@
  * when library is loaded
  */
 static Store gStore;
+static jobject gLock;
 
 static jclass StringClass;
 static jclass ColorClass;
@@ -69,6 +70,35 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
 
     // Store initialization
     gStore.mLength = 0;
+
+    // Create an instance of object used as for locks
+    jclass ObjectClass = env->FindClass("java/lang/Object");
+    if (ObjectClass == NULL) {
+        abort();
+    }
+    jmethodID ObjectConstructor = env->GetMethodID(ObjectClass, "<init>", "()V");
+    if (ObjectConstructor == NULL) {
+        abort();
+    }
+    jobject lockTmp = env->NewObject(ObjectClass, ObjectConstructor);
+
+    env->DeleteLocalRef(ObjectClass);
+    gLock = env->NewGlobalRef(lockTmp);
+    env->DeleteLocalRef(lockTmp);
+
+    // Save the lock object in StoreThreadSafe.LOCK field
+    jclass StoreThreadSafeClass = env->FindClass("com/example/brovkoroman/store/StoreThreadSafe");
+    if (StoreThreadSafeClass == NULL) {
+        abort();
+    }
+    jfieldID lockField = env->GetStaticFieldID(StoreThreadSafeClass, "LOCK", "Ljava/lang/Object");
+    if (lockField == NULL) {
+        abort();
+    }
+
+    env->SetStaticObjectField(StoreThreadSafeClass, lockField, gLock);
+    env->DeleteLocalRef(StoreThreadSafeClass);
+
     return JNI_VERSION_1_6;
 }
 
@@ -683,4 +713,22 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShortArray
         entry->mLength = length;
         entry->mValue.mShortArray = array;
     }
+}
+
+JNIEXPORT jlong JNICALL Java_com_example_brovkoroman_store_Store_startWatcher
+        (JNIEnv *pEnv, jobject pThis) {
+    JavaVM *javaVM;
+    // Caches the VM
+    if (pEnv->GetJavaVM(&javaVM) != JNI_OK) {
+        abort();
+    }
+
+    // Launches the background thread
+    StoreWatcher *watcher = startWatcher(javaVM, &gStore, gLock);
+    return (jlong) watcher;
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_stopWatcher
+        (JNIEnv *pEnv, jobject pThis, jlong pWatcher) {
+    stopWatcher((StoreWatcher *)pWatcher);
 }

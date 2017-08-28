@@ -6,6 +6,7 @@
 #define STORE_STORE_H
 
 #include <cstdint>
+#include <pthread.h>
 #include "jni.h"
 
 /*
@@ -91,5 +92,24 @@ void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry);
 void throwInvalidTypeException(JNIEnv *pEnv);
 void throwNotExistingKeyException(JNIEnv *pEnv);
 void throwStoreFullException(JNIEnv *pEnv);
+
+/*
+ * Watcher data structure
+ */
+typedef struct {
+    Store* mStore;
+    JavaVM* mJavaVM;
+    jobject mLock;
+    pthread_t mThread;
+    int32_t mRunning;
+} StoreWatcher;
+
+/*
+ * Watcher methods
+ */
+StoreWatcher* startWatcher(JavaVM *pJavaVM, Store *pStore, jobject pLock);
+void stopWatcher(StoreWatcher *pWatcher);
+void* runWatcher(void* pArgs);
+void processEntry(StoreEntry *pEntry);
 
 #endif //STORE_STORE_H
