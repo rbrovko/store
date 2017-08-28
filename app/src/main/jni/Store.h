@@ -29,7 +29,14 @@ typedef enum {
     StoreType_Color,
     StoreType_IntegerArray,
     StoreType_StringArray,
-    StoreType_ColorArray
+    StoreType_ColorArray,
+    StoreType_BooleanArray,
+    StoreType_ByteArray,
+    StoreType_CharArray,
+    StoreType_DoubleArray,
+    StoreType_FloatArray,
+    StoreType_LongArray,
+    StoreType_ShortArray
 } StoreType;
 
 /*
@@ -49,6 +56,13 @@ typedef union {
     int32_t* mIntegerArray;
     char** mStringArray;
     jobject* mColorArray;
+    uint8_t* mBooleanArray;
+    int8_t* mByteArray;
+    uint16_t* mCharArray;
+    double* mDoubleArray;
+    float* mFloatArray;
+    int64_t* mLongArray;
+    int16_t* mShortArray;
 } StoreValue;
 
 typedef struct {

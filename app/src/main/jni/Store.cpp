@@ -57,6 +57,17 @@ StoreEntry* findEntry(JNIEnv *pEnv, Store *pStore, jstring pKey) {
 
 void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry) {
     switch (pEntry->mType) {
+
+        case StoreType_Integer:
+        case StoreType_Boolean:
+        case StoreType_Byte:
+        case StoreType_Char:
+        case StoreType_Double:
+        case StoreType_Float:
+        case StoreType_Long:
+        case StoreType_Short:
+            break;
+
         case StoreType_String:
             delete pEntry->mValue.mString;
             break;
@@ -87,6 +98,34 @@ void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry) {
                 pEnv->DeleteGlobalRef(pEntry->mValue.mColorArray[i]);
             }
             delete[] pEntry->mValue.mColorArray;
+            break;
+
+        case StoreType_BooleanArray:
+            delete[] pEntry->mValue.mBooleanArray;
+            break;
+
+        case StoreType_ByteArray:
+            delete[] pEntry->mValue.mByteArray;
+            break;
+
+        case StoreType_CharArray:
+            delete[] pEntry->mValue.mCharArray;
+            break;
+
+        case StoreType_DoubleArray:
+            delete[] pEntry->mValue.mDoubleArray;
+            break;
+
+        case StoreType_FloatArray:
+            delete[] pEntry->mValue.mFloatArray;
+            break;
+
+        case StoreType_LongArray:
+            delete[] pEntry->mValue.mLongArray;
+            break;
+
+        case StoreType_ShortArray:
+            delete[] pEntry->mValue.mShortArray;
             break;
     }
 }

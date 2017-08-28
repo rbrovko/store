@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <cstdint>
+#include <cstring>
 
 #include "com_example_brovkoroman_store_Store.h"
 #include "Store.h"
@@ -429,5 +430,224 @@ JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setColorArray
         entry->mType = StoreType_ColorArray;
         entry->mLength = length;
         entry->mValue.mColorArray = array;
+    }
+}
+
+JNIEXPORT jbooleanArray JNICALL Java_com_example_brovkoroman_store_Store_getBooleanArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_BooleanArray)) {
+        jbooleanArray javaArray = pEnv->NewBooleanArray(entry->mLength);
+        pEnv->SetBooleanArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mBooleanArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setBooleanArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jbooleanArray pBooleanArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pBooleanArray);
+        uint8_t *array = new uint8_t[length];
+
+        // Retrieves array content
+        jboolean  *arrayTmp = pEnv->GetBooleanArrayElements(pBooleanArray, NULL);
+        memcpy(array, arrayTmp, length * sizeof(uint8_t));
+        pEnv->ReleaseBooleanArrayElements(pBooleanArray, arrayTmp, 0);
+
+        entry->mType = StoreType_BooleanArray;
+        entry->mLength = length;
+        entry->mValue.mBooleanArray = array;
+    }
+}
+
+JNIEXPORT jbyteArray JNICALL Java_com_example_brovkoroman_store_Store_getByteArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_ByteArray)) {
+        jbyteArray javaArray = pEnv->NewByteArray(entry->mLength);
+        pEnv->SetByteArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mByteArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setByteArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jbyteArray pByteArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pByteArray);
+        int8_t *array = new int8_t[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetByteArrayRegion(pByteArray, 0, length, array);
+
+        entry->mType = StoreType_ByteArray;
+        entry->mLength = length;
+        entry->mValue.mByteArray = array;
+    }
+}
+
+JNIEXPORT jcharArray JNICALL Java_com_example_brovkoroman_store_Store_getCharArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_CharArray)) {
+        jcharArray javaArray = pEnv->NewCharArray(entry->mLength);
+        pEnv->SetCharArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mCharArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setCharArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jcharArray pCharArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pCharArray);
+        uint16_t *array = new uint16_t[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetCharArrayRegion(pCharArray, 0, length, array);
+
+        entry->mType = StoreType_CharArray;
+        entry->mLength = length;
+        entry->mValue.mCharArray = array;
+    }
+}
+
+JNIEXPORT jdoubleArray JNICALL Java_com_example_brovkoroman_store_Store_getDoubleArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_DoubleArray)) {
+        jdoubleArray javaArray = pEnv->NewDoubleArray(entry->mLength);
+        pEnv->SetDoubleArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mDoubleArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setDoubleArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jdoubleArray pDoubleArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pDoubleArray);
+        double *array = new double[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetDoubleArrayRegion(pDoubleArray, 0, length, array);
+
+        entry->mType = StoreType_DoubleArray;
+        entry->mLength = length;
+        entry->mValue.mDoubleArray = array;
+    }
+}
+
+JNIEXPORT jfloatArray JNICALL Java_com_example_brovkoroman_store_Store_getFloatArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_FloatArray)) {
+        jfloatArray javaArray = pEnv->NewFloatArray(entry->mLength);
+        pEnv->SetFloatArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mFloatArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setFloatArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jfloatArray pFloatArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pFloatArray);
+        float *array = new float[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetFloatArrayRegion(pFloatArray, 0, length, array);
+
+        entry->mType = StoreType_FloatArray;
+        entry->mLength = length;
+        entry->mValue.mFloatArray = array;
+    }
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_example_brovkoroman_store_Store_getLongArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_LongArray)) {
+        jlongArray javaArray = pEnv->NewLongArray(entry->mLength);
+        pEnv->SetLongArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mLongArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setLongArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jlongArray pLongArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pLongArray);
+        int64_t *array = new int64_t[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetLongArrayRegion(pLongArray, 0, length, array);
+
+        entry->mType = StoreType_LongArray;
+        entry->mLength = length;
+        entry->mValue.mLongArray = array;
+    }
+}
+
+JNIEXPORT jshortArray JNICALL Java_com_example_brovkoroman_store_Store_getShortArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey) {
+    StoreEntry *entry = findEntry(pEnv, &gStore, pKey);
+
+    if (isEntryValid(pEnv, entry, StoreType_ShortArray)) {
+        jshortArray javaArray = pEnv->NewShortArray(entry->mLength);
+        pEnv->SetShortArrayRegion(javaArray, 0, entry->mLength, entry->mValue.mShortArray);
+
+        return javaArray;
+    } else {
+        return NULL;
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_example_brovkoroman_store_Store_setShortArray
+        (JNIEnv *pEnv, jobject pThis, jstring pKey, jshortArray pShortArray) {
+    StoreEntry *entry = allocateEntry(pEnv, &gStore, pKey);
+
+    if (entry != NULL) {
+        jsize length = pEnv->GetArrayLength(pShortArray);
+        int16_t *array = new int16_t[length];
+
+        // Copies Java array content directly in this new C array
+        pEnv->GetShortArrayRegion(pShortArray, 0, length, array);
+
+        entry->mType = StoreType_ShortArray;
+        entry->mLength = length;
+        entry->mValue.mShortArray = array;
     }
 }
