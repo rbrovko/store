@@ -38,15 +38,30 @@ import javax.annotation.Nullable;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements StoreListener {
 
-    private Store mStore = new Store();
+    private Store mStore = new Store(this);
     private EditText mUIKeyEdit, mUIValueEdit;
     private Spinner mUITypeSpinner;
     private Button mUIGetButton, mUISetButton;
     private Pattern mKeyPattern;
 
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onSuccess(int pValue) {
+        displayMessage(String.format("Integer '%1$d' successfuly saved!", pValue));
+    }
+
+    @Override
+    public void onSuccess(String pValue) {
+        displayMessage(String .format("String '%1$s' successfuly saved!", pValue));
+    }
+
+    @Override
+    public void onSuccess(Color pValue) {
+        displayMessage(String.format("Color '%1$s' successfuly saved!", pValue));
     }
 
     @Override

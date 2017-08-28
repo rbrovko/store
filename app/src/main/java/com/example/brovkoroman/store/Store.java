@@ -10,9 +10,16 @@ import com.example.brovkoroman.exception.NotExistingKeyException;
 /**
  * Storage with native
  */
-public class Store {
+public class Store implements StoreListener {
+
+    private StoreListener mListener;
+
     static {
         System.loadLibrary("com_example_brovkoroman_store_Store");
+    }
+
+    public Store(StoreListener pListener) {
+        mListener = pListener;
     }
 
     /**
@@ -80,4 +87,19 @@ public class Store {
 
     public native short[] getShortArray(String pKey) throws NotExistingKeyException, InvalidTypeException;
     public native void setShortArray(String pKey, short[] pShortArray);
+
+    @Override
+    public void onSuccess(int pValue) {
+        mListener.onSuccess(pValue);
+    }
+
+    @Override
+    public void onSuccess(String pValue) {
+        mListener.onSuccess(pValue);
+    }
+
+    @Override
+    public void onSuccess(Color pValue) {
+        mListener.onSuccess(pValue);
+    }
 }
