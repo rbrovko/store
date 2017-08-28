@@ -7,7 +7,12 @@
 #include <cstring>
 
 bool isEntryValid(JNIEnv *pEnv, StoreEntry *pEntry, StoreType pType) {
-    return ((pEntry != NULL) && (pEntry->mType == pType));
+    if (pEntry == NULL) {
+        throwNotExistingKeyException(pEnv);
+    } else if (pEntry->mType != pType) {
+        throwInvalidTypeException(pEnv);
+    }
+    return !pEnv->ExceptionCheck();
 }
 
 StoreEntry* allocateEntry(JNIEnv *pEnv, Store *pStore, jstring pKey) {
@@ -20,6 +25,13 @@ StoreEntry* allocateEntry(JNIEnv *pEnv, Store *pStore, jstring pKey) {
     if (entry != NULL) {
         releaseEntryValue(pEnv, entry);
     } else {
+
+        // Checks store can accept a new entry
+        if (pStore->mLength >= STORE_MAX_CAPACITY) {
+            throwStoreFullException(pEnv);
+            return NULL;
+        }
+
         /*
          * If entry does not exist, create a new entry
          * right after the entries already stored
@@ -128,4 +140,34 @@ void releaseEntryValue(JNIEnv *pEnv, StoreEntry *pEntry) {
             delete[] pEntry->mValue.mShortArray;
             break;
     }
+}
+
+void throwInvalidTypeException(JNIEnv *pEnv) {
+    jclass class1 = pEnv->FindClass("com/example/brovkoroman/exception/InvalidTypeException");
+
+    if (class1 != NULL) {
+        pEnv->ThrowNew(class1, "Type is invalid.");
+    }
+
+    pEnv->DeleteLocalRef(class1);
+}
+
+void throwNotExistingKeyException(JNIEnv *pEnv) {
+    jclass class1 = pEnv->FindClass("com/example/brovkoroman/exception/NotExistingKeyException");
+
+    if (class1 != NULL) {
+        pEnv->ThrowNew(class1, "Key does not exist.");
+    }
+
+    pEnv->DeleteLocalRef(class1);
+}
+
+void throwStoreFullException(JNIEnv *pEnv) {
+    jclass class1 = pEnv->FindClass("com/example/brovkoroman/exception/StoreFullException");
+
+    if (class1 != NULL) {
+        pEnv->ThrowNew(class1, "Store is full.");
+    }
+
+    pEnv->DeleteLocalRef(class1);
 }

@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.brovkoroman.exception.InvalidTypeException;
+import com.example.brovkoroman.exception.NotExistingKeyException;
+import com.example.brovkoroman.exception.StoreFullException;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -102,88 +105,97 @@ public class MainActivityFragment extends Fragment {
             return;
         }
 
-        // Retrieves value from the store and displays it
-        switch (type) {
-            case String:
-                mUIValueEdit.setText(mStore.getString(key));
-                break;
+        try {
+            // Retrieves value from the store and displays it
+            switch (type) {
+                case String:
+                    mUIValueEdit.setText(mStore.getString(key));
+                    break;
 
-            case Integer:
-                mUIValueEdit.setText(Integer.toString(mStore.getInteger(key)));
-                break;
+                case Integer:
+                    mUIValueEdit.setText(Integer.toString(mStore.getInteger(key)));
+                    break;
 
-            case Boolean:
-                mUIValueEdit.setText(Boolean.toString(mStore.getBoolean(key)));
-                break;
+                case Boolean:
+                    mUIValueEdit.setText(Boolean.toString(mStore.getBoolean(key)));
+                    break;
 
-            case Byte:
-                mUIValueEdit.setText(Byte.toString(mStore.getByte(key)));
-                break;
+                case Byte:
+                    mUIValueEdit.setText(Byte.toString(mStore.getByte(key)));
+                    break;
 
-            case Char:
-                mUIValueEdit.setText(Character.toString(mStore.getChar(key)));
-                break;
+                case Char:
+                    mUIValueEdit.setText(Character.toString(mStore.getChar(key)));
+                    break;
 
-            case Double:
-                mUIValueEdit.setText(Double.toString(mStore.getDouble(key)));
-                break;
+                case Double:
+                    mUIValueEdit.setText(Double.toString(mStore.getDouble(key)));
+                    break;
 
-            case Float:
-                mUIValueEdit.setText(Float.toString(mStore.getFloat(key)));
-                break;
+                case Float:
+                    mUIValueEdit.setText(Float.toString(mStore.getFloat(key)));
+                    break;
 
-            case Long:
-                mUIValueEdit.setText(Long.toString(mStore.getLong(key)));
-                break;
+                case Long:
+                    mUIValueEdit.setText(Long.toString(mStore.getLong(key)));
+                    break;
 
-            case Short:
-                mUIValueEdit.setText(Short.toString(mStore.getShort(key)));
-                break;
+                case Short:
+                    mUIValueEdit.setText(Short.toString(mStore.getShort(key)));
+                    break;
 
-            case Color:
-                mUIValueEdit.setText(mStore.getColor(key).toString());
-                break;
+                case Color:
+                    mUIValueEdit.setText(mStore.getColor(key).toString());
+                    break;
 
-            case IntegerArray:
-                mUIValueEdit.setText(Ints.join(";", mStore.getIntegerArray(key)));
-                break;
+                case IntegerArray:
+                    mUIValueEdit.setText(Ints.join(";", mStore.getIntegerArray(key)));
+                    break;
 
-            case StringArray:
-                mUIValueEdit.setText(Joiner.on(";").join(mStore.getStringArray(key)));
-                break;
+                case StringArray:
+                    mUIValueEdit.setText(Joiner.on(";").join(mStore.getStringArray(key)));
+                    break;
 
-            case ColorArray:
-                mUIValueEdit.setText(Joiner.on(";").join(mStore.getColorArrya(key)));
-                break;
+                case ColorArray:
+                    mUIValueEdit.setText(Joiner.on(";").join(mStore.getColorArrya(key)));
+                    break;
 
-            case BooleanArray:
-                mUIValueEdit.setText(Booleans.join(";", mStore.getBooleanArray(key)));
-                break;
+                case BooleanArray:
+                    mUIValueEdit.setText(Booleans.join(";", mStore.getBooleanArray(key)));
+                    break;
 
-            case ByteArray:
-                mUIValueEdit.setText(Joiner.on(";").join(Bytes.asList(mStore.getByteArray(key))));
-                break;
+                case ByteArray:
+                    mUIValueEdit.setText(Joiner.on(";").join(Bytes.asList(mStore.getByteArray(key))));
+                    break;
 
-            case CharArray:
-                mUIValueEdit.setText(Chars.join(";", mStore.getCharArray(key)));
-                break;
+                case CharArray:
+                    mUIValueEdit.setText(Chars.join(";", mStore.getCharArray(key)));
+                    break;
 
-            case DoubleArray:
-                mUIValueEdit.setText(Doubles.join(";", mStore.getDoubleArray(key)));
-                break;
+                case DoubleArray:
+                    mUIValueEdit.setText(Doubles.join(";", mStore.getDoubleArray(key)));
+                    break;
 
-            case FloatArray:
-                mUIValueEdit.setText(Floats.join(";", mStore.getFloatArray(key)));
-                break;
+                case FloatArray:
+                    mUIValueEdit.setText(Floats.join(";", mStore.getFloatArray(key)));
+                    break;
 
-            case LongArray:
-                mUIValueEdit.setText(Longs.join(";", mStore.getLongArray(key)));
-                break;
+                case LongArray:
+                    mUIValueEdit.setText(Longs.join(";", mStore.getLongArray(key)));
+                    break;
 
-            case ShortArray:
-                mUIValueEdit.setText(Shorts.join(";", mStore.getShortArray(key)));
-                break;
+                case ShortArray:
+                    mUIValueEdit.setText(Shorts.join(";", mStore.getShortArray(key)));
+                    break;
+            }
+
+            // Process any exception raised while retrieving data
+        } catch (NotExistingKeyException eNotExistingKeyException) {
+            displayMessage(eNotExistingKeyException.getMessage());
+        } catch (InvalidTypeException eInvalidTypeException) {
+            displayMessage(eInvalidTypeException.getMessage());
         }
+
     }
 
     private void onSetValue() {
@@ -227,7 +239,7 @@ public class MainActivityFragment extends Fragment {
                     if (value.length() == 1) {
                         mStore.setChar(key, value.charAt(0));
                     } else {
-                        throw  new IllegalArgumentException();
+                        throw new IllegalArgumentException();
                     }
                     break;
 
@@ -356,6 +368,10 @@ public class MainActivityFragment extends Fragment {
                         }
                     }, value)));
             }
+        } catch (NumberFormatException eNumberFormatException) {
+            displayMessage(eNumberFormatException.getMessage());
+        } catch (StoreFullException eStoreFullException) {
+            displayMessage(eStoreFullException.getMessage());
         } catch (Exception eException) {
             displayMessage("Incorrect value");
         }
